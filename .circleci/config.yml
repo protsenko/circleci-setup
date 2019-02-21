@@ -1,21 +1,38 @@
-version: 2
+version: 2.1
+
+executors:
+  circleci-setup-executor:
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    working_directory: ~/circleci-setup
 
 jobs:
-  build:
-    working_directory: ~/circleci-setup
-    docker: # run the steps with Docker
-      - image: circleci/openjdk:8-jdk-browsers
+  testing:
+    executor: circleci-setup-executor
     steps:
       - checkout
-      - restore_cache:
-          key: circleci-setup-{{ checksum "pom.xml" }}
       - run: mvn dependency:go-offline
-      - save_cache:
+      - run: mvn verify
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+          # taken to be the root directory of the workspace.
+          root: circleci-setup
+          # Must be relative path from root
           paths:
-            - ~/.m2
-          key: circleci-demo-java-spring-{{ checksum "pom.xml" }}
-      - run: mvn package
-      - store_test_results:
-          path: target/surefire-reports
-      - store_artifacts:
-          path: target/circleci-setup-0.0.1-SNAPSHOT.jar
+            - .
+
+  mutation-testing:
+    executor: circleci-setup-executor
+    steps:
+      - attach_workspace:
+          at: ~/circleci-setup
+      - run: mvn org.pitest:pitest-maven:mutationCoverage
+
+workflows:
+  version: 2
+  standart-workflow:
+    jobs:
+      - testing
+      - mutation-testing:
+          requires:
+            - testing
