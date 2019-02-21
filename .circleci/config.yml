@@ -36,6 +36,16 @@ jobs:
           key: circleci-setup-{{ checksum "pom.xml" }}
       - run: mvn org.pitest:pitest-maven:mutationCoverage
 
+  static-analysis:
+    executor: circleci-setup-executor
+    steps:
+      - attach_workspace:
+          at: ~/circleci-setup
+      - restore_cache:
+          key: circleci-setup-{{ checksum "pom.xml" }}
+      - run: |
+          mvn sonar:sonar -Dsonar.organization=${SONAR_ORGANIZATION} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectKey=${PROJECT_KEY} -Dsonar.branch.name=${CIRCLE_BRANCH}
+
 workflows:
   version: 2
   standart-workflow:
@@ -43,4 +53,7 @@ workflows:
       - testing
       - mutation-testing:
           requires:
-            - testing
+          - testing
+      - static-analysis:
+          requires:
+            - mutation-testing
