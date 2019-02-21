@@ -1,7 +1,7 @@
 version: 2
 
 jobs:
-  package:
+  build:
     working_directory: ~/circleci-setup
     docker: # run the steps with Docker
       - image: circleci/openjdk:8-jdk-browsers
