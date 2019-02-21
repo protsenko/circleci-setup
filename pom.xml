@@ -51,6 +51,9 @@
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
                 <version>1.4.5</version>
+                <configuration>
+                    <failWhenNoMutations>false</failWhenNoMutations>
+                </configuration>
             </plugin>
         </plugins>
     </build>
