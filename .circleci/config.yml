@@ -32,6 +32,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/circleci-setup
+      - restore_cache:
+          key: circleci-setup-{{ checksum "pom.xml" }}
       - run: mvn org.pitest:pitest-maven:mutationCoverage
 
 workflows:
