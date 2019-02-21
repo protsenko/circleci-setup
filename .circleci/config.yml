@@ -43,8 +43,16 @@ jobs:
           at: ~/circleci-setup
       - restore_cache:
           key: circleci-setup-{{ checksum "pom.xml" }}
-      - run: |
-          mvn sonar:sonar -Dsonar.organization=${SONAR_ORGANIZATION} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectKey=${PROJECT_KEY} -Dsonar.branch.name=${CIRCLE_BRANCH}
+      - run: mvn sonar:sonar -Dsonar.organization=${SONAR_ORGANIZATION} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectKey=${PROJECT_KEY} -Dsonar.branch.name=${CIRCLE_BRANCH}
+
+  packaging:
+    executor: circleci-setup-executor
+    steps:
+      - attach_workspace:
+          at: ~/circleci-setup
+      - restore_cache:
+          key: circleci-setup-{{ checksum "pom.xml" }}
+      - run: mvn package -Dmaven.test.skip=true
 
 workflows:
   version: 2
@@ -57,3 +65,7 @@ workflows:
       - static-analysis:
           requires:
             - mutation-testing
+      - packaging:
+          requires:
+            - static-analysis
+
