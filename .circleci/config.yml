@@ -19,8 +19,3 @@ jobs:
           path: target/surefire-reports
       - store_artifacts:
           path: target/circleci-setup-0.0.1-SNAPSHOT.jar
-
-workflows:
-  maven_test:
-    jobs:
-      - package
