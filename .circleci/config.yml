@@ -43,7 +43,7 @@ jobs:
           at: ~/circleci-setup
       - restore_cache:
           key: circleci-setup-{{ checksum "pom.xml" }}
-      - run: mvn sonar:sonar -Dsonar.organization=${SONAR_ORGANIZATION} -Dsonar.login=${SONAR_TOKEN} -Dsonar.host.url=${SONAR_HOST} -Dsonar.branch.name=${CIRCLE_BRANCH}
+      - run: mvn sonar:sonar -Dsonar.projectKey=circleci-setup -Dsonar.organization=${SONAR_ORGANIZATION} -Dsonar.login=${SONAR_TOKEN} -Dsonar.host.url=${SONAR_HOST} -Dsonar.branch.name=${CIRCLE_BRANCH}
 
 workflows:
   version: 2
