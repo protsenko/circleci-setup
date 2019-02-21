@@ -61,11 +61,12 @@ workflows:
       - testing
       - mutation-testing:
           requires:
-          - testing
+            - testing
       - static-analysis:
           requires:
-            - mutation-testing
+            - testing
       - packaging:
           requires:
+            - mutation-testing
             - static-analysis
 
