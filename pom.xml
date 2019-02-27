@@ -10,8 +10,6 @@
 
     <name>circleci-setup</name>
 
-
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -110,6 +108,7 @@
                 <configuration>
                     <argLine>${surefireArgLine}</argLine>
                     <skipTests>${skip.surefire.tests}</skipTests>
+                    <forkMode>never</forkMode>
                 </configuration>
             </plugin>
 
@@ -120,6 +119,7 @@
                 <version>${maven-failsafe-plugin.version}</version>
                 <configuration>
                     <argLine>${failsafeArgLine}</argLine>
+                    <forkMode>never</forkMode>
                 </configuration>
             </plugin>
 
@@ -134,5 +134,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
