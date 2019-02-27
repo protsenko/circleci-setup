@@ -23,15 +23,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>3.0.0-M3</maven-failsafe-plugin.version>
+        <pitest-maven.version>1.4.5</pitest-maven.version>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>3.4.0.905</sonar-maven-plugin.version>
+        <skip.surefire.tests>false</skip.surefire.tests>
 
         <sonar.language>java</sonar.language>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-        <sonar.jacoco.reportPath>${project.basedir}/target/jacoco-ut.exec</sonar.jacoco.reportPath>
-        <sonar.jacoco.itReportPath>${project.basedir}/target/jacoco-it.exec</sonar.jacoco.itReportPath>
-        <!--<sonar.host.url>http://sonar.tmaws.io</sonar.host.url>-->
+        <sonar.jacoco.reportPath>${project.basedir}/target/exec/jacoco-ut.exec</sonar.jacoco.reportPath>
+        <sonar.jacoco.itReportPath>${project.basedir}/target/exec/jacoco-it.exec</sonar.jacoco.itReportPath>
     </properties>
 
     <dependencies>
@@ -103,16 +106,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M3</version>
+                <version>${maven-surefire-plugin.version}</version>
                 <configuration>
-                    <!--suppress MavenModelInspection -->
                     <argLine>${surefireArgLine}</argLine>
-                    <!--<includes>-->
-                    <!--<include>**/*Test.java</include>-->
-                    <!--</includes>-->
-                    <!--<excludes>-->
-                    <!--<exclude>**/*TestIT.java</exclude>-->
-                    <!--</excludes>-->
+                    <skipTests>${skip.surefire.tests}</skipTests>
                 </configuration>
             </plugin>
 
@@ -120,16 +117,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0-M3</version>
+                <version>${maven-failsafe-plugin.version}</version>
                 <configuration>
-                    <!--suppress MavenModelInspection -->
                     <argLine>${failsafeArgLine}</argLine>
-                    <!--<includes>-->
-                    <!--<include>**/*IT.java</include>-->
-                    <!--</includes>-->
-                    <!--<excludes>-->
-                    <!--<exclude>**/*Test.java</exclude>-->
-                    <!--</excludes>-->
                 </configuration>
                 <executions>
                     <execution>
@@ -145,7 +135,7 @@
             <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
-                <version>1.4.5</version>
+                <version>${pitest-maven.version}</version>
                 <configuration>
                     <failWhenNoMutations>false</failWhenNoMutations>
                 </configuration>
