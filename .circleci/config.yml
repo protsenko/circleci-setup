@@ -35,6 +35,10 @@ jobs:
       - restore_cache:
           key: circleci-setup-{{ checksum "pom.xml" }}
       - run: mvn verify -Dskip.surefire.tests=true
+      - persist_to_workspace:
+          root: ~/circleci-setup
+          paths:
+            - .
 
   mutation-test:
     executor: circleci-setup-executor
@@ -44,6 +48,10 @@ jobs:
       - restore_cache:
           key: circleci-setup-{{ checksum "pom.xml" }}
       - run: mvn org.pitest:pitest-maven:mutationCoverage
+      - persist_to_workspace:
+          root: ~/circleci-setup
+          paths:
+            - .
 
   static-analysis:
     executor: circleci-setup-executor
