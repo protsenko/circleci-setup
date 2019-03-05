@@ -7,7 +7,7 @@ executors:
     working_directory: ~/circleci-setup
 
 jobs:
-  testing:
+  unit-test:
     executor: circleci-setup-executor
     steps:
       - checkout
@@ -18,7 +18,7 @@ jobs:
           paths:
             - ~/.m2
           key: circleci-setup-{{ checksum "pom.xml" }}
-      - run: mvn verify -Dskip.surefire.tests=true
+      - run: mvn test
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
           # taken to be the root directory of the workspace.
@@ -27,7 +27,16 @@ jobs:
           paths:
             - .
 
-  mutation-testing:
+  integration-test:
+    executor: circleci-setup-executor
+    steps:
+      - attach_workspace:
+          at: ~/circleci-setup
+      - restore_cache:
+          key: circleci-setup-{{ checksum "pom.xml" }}
+      - run: mvn verify -Dskip.surefire.tests=true
+
+  mutation-test:
     executor: circleci-setup-executor
     steps:
       - attach_workspace:
@@ -58,14 +67,16 @@ workflows:
   version: 2
   standart-workflow:
     jobs:
-      - testing
-      - mutation-testing:
+      - unit-test
+      - integration-test:
           requires:
-            - testing
+            - unit-test
+      - mutation-test:
+          requires:
+            - integration-test
       - static-analysis:
           requires:
             - mutation-testing
       - packaging:
           requires:
             - static-analysis
-
