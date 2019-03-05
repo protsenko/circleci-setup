@@ -39,7 +39,7 @@
             ${report.integration.test}
         </sonar.jacoco.reportPaths>
         <sonar.exclusions>
-            **/FakeApplication.java
+            **/*Application.java
         </sonar.exclusions>
     </properties>
 
