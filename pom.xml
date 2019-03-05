@@ -113,6 +113,7 @@
                     <argLine>${surefireArgLine}</argLine>
                     <skipTests>${skip.surefire.tests}</skipTests>
                     <forkMode>never</forkMode>
+                    <runOrder>random</runOrder>
                 </configuration>
             </plugin>
 
@@ -124,6 +125,7 @@
                 <configuration>
                     <argLine>${failsafeArgLine}</argLine>
                     <forkMode>never</forkMode>
+                    <runOrder>random</runOrder>
                 </configuration>
             </plugin>
 
