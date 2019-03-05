@@ -76,7 +76,7 @@ workflows:
             - integration-test
       - static-analysis:
           requires:
-            - mutation-testing
+            - mutation-test
       - packaging:
           requires:
             - static-analysis
