@@ -38,6 +38,9 @@
             ${report.unit.test},
             ${report.integration.test}
         </sonar.jacoco.reportPaths>
+        <sonar.exclusions>
+            **/*Application.java
+        </sonar.exclusions>
     </properties>
 
     <dependencies>
