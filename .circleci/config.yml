@@ -25,7 +25,7 @@ jobs:
           root: ~/circleci-setup
           # Must be relative path from root
           paths:
-            - .
+            - ut
 
   integration-test:
     executor: circleci-setup-executor
@@ -38,7 +38,7 @@ jobs:
       - persist_to_workspace:
           root: ~/circleci-setup
           paths:
-            - .
+            - it
 
   mutation-test:
     executor: circleci-setup-executor
@@ -51,7 +51,7 @@ jobs:
       - persist_to_workspace:
           root: ~/circleci-setup
           paths:
-            - .
+            - mt
 
   static-analysis:
     executor: circleci-setup-executor
