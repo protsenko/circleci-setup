@@ -59,6 +59,16 @@ jobs:
           key: circleci-setup-{{ checksum "pom.xml" }}
       - run: mvn sonar:sonar -Dsonar.organization=${SONAR_ORGANIZATION} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectKey=${PROJECT_KEY} -Dsonar.branch.name=${CIRCLE_BRANCH}
 
+  spotbugs-analysis:
+    executor: circleci-setup-executor
+    steps:
+      - attach_workspace:
+          at: ~/circleci-setup
+      - restore_cache:
+          key: circleci-setup-{{ checksum "pom.xml" }}
+      - run: mvn spotbugs:check
+
+
   packaging:
     executor: circleci-setup-executor
     steps:
@@ -82,6 +92,10 @@ workflows:
       - static-analysis:
           requires:
             - mutation-test
+      - spotbugs-analysis:
+          requires:
+            - mutation-test
       - packaging:
           requires:
             - static-analysis
+            - spotbugs-analysis
