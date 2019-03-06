@@ -20,12 +20,9 @@ jobs:
           key: circleci-setup-{{ checksum "pom.xml" }}
       - run: mvn test
       - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
-          # taken to be the root directory of the workspace.
           root: ~/circleci-setup
-          # Must be relative path from root
           paths:
-            - ut
+            - .
 
   integration-test:
     executor: circleci-setup-executor
@@ -38,7 +35,7 @@ jobs:
       - persist_to_workspace:
           root: ~/circleci-setup
           paths:
-            - it
+            - .
 
   mutation-test:
     executor: circleci-setup-executor
@@ -51,7 +48,7 @@ jobs:
       - persist_to_workspace:
           root: ~/circleci-setup
           paths:
-            - mt
+            - .
 
   static-analysis:
     executor: circleci-setup-executor
