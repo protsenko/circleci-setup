@@ -26,6 +26,7 @@
         <pitest-maven.version>1.4.5</pitest-maven.version>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>3.4.0.905</sonar-maven-plugin.version>
+        <spotbugs-maven-plugin.version>3.1.11</spotbugs-maven-plugin.version>
         <skip.surefire.tests>false</skip.surefire.tests>
 
         <report.unit.test>${project.build.directory}/jacoco-ut.exec</report.unit.test>
@@ -68,12 +69,6 @@
             </plugin>
 
             <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>${sonar-maven-plugin.version}</version>
-            </plugin>
-
-            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco-maven-plugin.version}</version>
@@ -87,7 +82,7 @@
                         <configuration>
                             <destFile>${report.unit.test}</destFile>
                             <propertyName>surefireArgLine</propertyName>
-                            <append>true</append>
+                            <append>false</append>
                         </configuration>
                     </execution>
                     <execution>
@@ -99,7 +94,7 @@
                         <configuration>
                             <destFile>${report.integration.test}</destFile>
                             <propertyName>failsafeArgLine</propertyName>
-                            <append>true</append>
+                            <append>false</append>
                         </configuration>
                     </execution>
                     <execution>
@@ -143,6 +138,21 @@
                 <configuration>
                     <failWhenNoMutations>false</failWhenNoMutations>
                 </configuration>
+            </plugin>
+
+            <!-- Analysis after tests -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${sonar-maven-plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs-maven-plugin.version}</version>
+                <dependencies>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

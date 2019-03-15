@@ -20,10 +20,7 @@ jobs:
           key: circleci-setup-{{ checksum "pom.xml" }}
       - run: mvn test
       - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
-          # taken to be the root directory of the workspace.
           root: ~/circleci-setup
-          # Must be relative path from root
           paths:
             - .
 
@@ -35,6 +32,10 @@ jobs:
       - restore_cache:
           key: circleci-setup-{{ checksum "pom.xml" }}
       - run: mvn verify -Dskip.surefire.tests=true
+      - persist_to_workspace:
+          root: ~/circleci-setup
+          paths:
+            - .
 
   mutation-test:
     executor: circleci-setup-executor
@@ -44,6 +45,10 @@ jobs:
       - restore_cache:
           key: circleci-setup-{{ checksum "pom.xml" }}
       - run: mvn org.pitest:pitest-maven:mutationCoverage
+      - persist_to_workspace:
+          root: ~/circleci-setup
+          paths:
+            - .
 
   static-analysis:
     executor: circleci-setup-executor
@@ -53,6 +58,16 @@ jobs:
       - restore_cache:
           key: circleci-setup-{{ checksum "pom.xml" }}
       - run: mvn sonar:sonar -Dsonar.organization=${SONAR_ORGANIZATION} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectKey=${PROJECT_KEY} -Dsonar.branch.name=${CIRCLE_BRANCH}
+
+  spotbugs-analysis:
+    executor: circleci-setup-executor
+    steps:
+      - attach_workspace:
+          at: ~/circleci-setup
+      - restore_cache:
+          key: circleci-setup-{{ checksum "pom.xml" }}
+      - run: mvn spotbugs:check
+
 
   packaging:
     executor: circleci-setup-executor
@@ -77,6 +92,10 @@ workflows:
       - static-analysis:
           requires:
             - mutation-test
+      - spotbugs-analysis:
+          requires:
+            - mutation-test
       - packaging:
           requires:
             - static-analysis
+            - spotbugs-analysis
