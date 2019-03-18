@@ -95,12 +95,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - restore_cache:
-          key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
       - setup_remote_docker
       - docker-publish/check
-      - docker-publish/build:
-          extra_build_args: ARTIFACT=target/${CIRCLE_PROJECT_REPONAME}-0.0.1-SNAPSHOT.jar
+      - docker-publish/build
       - docker-publish/deploy
 
 
