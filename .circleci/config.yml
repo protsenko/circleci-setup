@@ -76,26 +76,20 @@ jobs:
       - run: mvn spotbugs:check
 
 
-  packaging:
-    executor: circleci-setup-executor
+  docker-build:
+    executor: docker-publish/docker
     steps:
       - attach_workspace:
           at: ~/
       - restore_cache:
           key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
       - run: mvn package -Dmaven.test.skip=true
-
-
-  docker-build:
-    executor: docker-publish/docker
-    steps:
-      - attach_workspace:
-          at: ~/
-      - checkout
       - setup_remote_docker
       - docker-publish/check
       - docker-publish/build:
           dockerfile: ./docker/Dockerfile
+          extra_build_args:
+            - ARTIFACT=target/${CIRCLE_PROJECT_REPONAME}-0.0.1-SNAPSHOT.jar
       - docker-publish/deploy
 
 
