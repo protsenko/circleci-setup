@@ -76,6 +76,20 @@ jobs:
       - run: mvn spotbugs:check
 
 
+  packaging:
+    executor: circleci-setup-executor
+    steps:
+      - attach_workspace:
+          at: ~/
+      - restore_cache:
+          key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
+      - run: mvn package -Dmaven.test.skip=true
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - .
+
+
   docker-build:
     executor: docker-publish/docker
     steps:
@@ -83,7 +97,6 @@ jobs:
           at: ~/
       - restore_cache:
           key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
-      - run: mvn package -Dmaven.test.skip=true
       - setup_remote_docker
       - docker-publish/check
       - docker-publish/build:
@@ -110,7 +123,10 @@ workflows:
       - spotbugs-analysis:
           requires:
             - mutation-test
-      - docker-build:
+      - packaging:
           requires:
             - static-analysis
             - spotbugs-analysis
+      - docker-build:
+          requires:
+            - packaging
