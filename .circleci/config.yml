@@ -101,6 +101,21 @@ jobs:
       - docker-publish/deploy
 
 
+  docker-build-latest:
+    executor: docker-publish/docker
+    steps:
+      - attach_workspace:
+          at: ~/
+      - setup_remote_docker
+      - docker-publish/check
+      - docker-publish/build:
+          tag: latest
+      - docker-publish/deploy
+    branches:
+      only:
+        -master
+
+
 workflows:
   version: 2
   standart-workflow:
@@ -123,5 +138,8 @@ workflows:
             - static-analysis
             - spotbugs-analysis
       - docker-build:
+          requires:
+            - packaging
+      - docker-build-latest:
           requires:
             - packaging
