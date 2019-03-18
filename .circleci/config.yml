@@ -103,9 +103,6 @@ jobs:
 
   docker-build-latest:
     executor: docker-publish/docker
-    branches:
-      only:
-        - master
     steps:
       - attach_workspace:
           at: ~/
@@ -143,3 +140,6 @@ workflows:
       - docker-build-latest:
           requires:
             - packaging
+          filters:
+            branches:
+              only: master
