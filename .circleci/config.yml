@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  docker-publish: circleci/docker-publish@0.1.6
+
 executors:
   circleci-setup-executor:
     docker:
@@ -83,6 +86,19 @@ jobs:
       - run: mvn package -Dmaven.test.skip=true
 
 
+  docker-build:
+    executor: docker-publish/docker
+    steps:
+      - attach_workspace:
+          at: ~/
+      - checkout
+      - setup_remote_docker
+      - docker-publish/check
+      - docker-publish/build:
+          dockerfile: ./docker/Dockerfile
+      - docker-publish/deploy
+
+
 workflows:
   version: 2
   standart-workflow:
@@ -104,3 +120,6 @@ workflows:
           requires:
             - static-analysis
             - spotbugs-analysis
+      - docker-build:
+          requires:
+            - packaging
