@@ -4,7 +4,6 @@ executors:
   circleci-setup-executor:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
-    working_directory: ~/circleci-setup
 
 jobs:
   unit-test:
