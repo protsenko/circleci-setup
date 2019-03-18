@@ -27,7 +27,7 @@ jobs:
     executor: circleci-setup-executor
     steps:
       - attach_workspace:
-          at: ~/circleci-setup
+          at: ~/
       - restore_cache:
           key: circleci-setup-{{ checksum "pom.xml" }}
       - run: mvn verify -Dskip.surefire.tests=true
@@ -40,7 +40,7 @@ jobs:
     executor: circleci-setup-executor
     steps:
       - attach_workspace:
-          at: ~/circleci-setup
+          at: ~/
       - restore_cache:
           key: circleci-setup-{{ checksum "pom.xml" }}
       - run: mvn org.pitest:pitest-maven:mutationCoverage
