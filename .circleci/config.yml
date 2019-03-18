@@ -1,10 +1,13 @@
 version: 2.1
 
+orbs:
+  docker-publish: circleci/docker-publish@0.1.6
+
 executors:
   circleci-setup-executor:
     docker:
-      - image: circleci/openjdk:8-jdk-browsers
-    working_directory: ~/circleci-setup
+      - image: circleci/openjdk:8u162-jdk
+
 
 jobs:
   unit-test:
@@ -12,60 +15,64 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: circleci-setup-{{ checksum "pom.xml" }}
+          key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
       - run: mvn dependency:go-offline
       - save_cache:
           paths:
             - ~/.m2
-          key: circleci-setup-{{ checksum "pom.xml" }}
+          key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
       - run: mvn test
       - persist_to_workspace:
-          root: ~/circleci-setup
+          root: ~/
           paths:
             - .
+
 
   integration-test:
     executor: circleci-setup-executor
     steps:
       - attach_workspace:
-          at: ~/circleci-setup
+          at: ~/
       - restore_cache:
-          key: circleci-setup-{{ checksum "pom.xml" }}
+          key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
       - run: mvn verify -Dskip.surefire.tests=true
       - persist_to_workspace:
-          root: ~/circleci-setup
+          root: ~/
           paths:
             - .
+
 
   mutation-test:
     executor: circleci-setup-executor
     steps:
       - attach_workspace:
-          at: ~/circleci-setup
+          at: ~/
       - restore_cache:
-          key: circleci-setup-{{ checksum "pom.xml" }}
+          key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
       - run: mvn org.pitest:pitest-maven:mutationCoverage
       - persist_to_workspace:
-          root: ~/circleci-setup
+          root: ~/
           paths:
             - .
+
 
   static-analysis:
     executor: circleci-setup-executor
     steps:
       - attach_workspace:
-          at: ~/circleci-setup
+          at: ~/
       - restore_cache:
-          key: circleci-setup-{{ checksum "pom.xml" }}
+          key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
       - run: mvn sonar:sonar -Dsonar.organization=${SONAR_ORGANIZATION} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectKey=${PROJECT_KEY} -Dsonar.branch.name=${CIRCLE_BRANCH}
+
 
   spotbugs-analysis:
     executor: circleci-setup-executor
     steps:
       - attach_workspace:
-          at: ~/circleci-setup
+          at: ~/
       - restore_cache:
-          key: circleci-setup-{{ checksum "pom.xml" }}
+          key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
       - run: mvn spotbugs:check
 
 
@@ -73,10 +80,38 @@ jobs:
     executor: circleci-setup-executor
     steps:
       - attach_workspace:
-          at: ~/circleci-setup
+          at: ~/
       - restore_cache:
-          key: circleci-setup-{{ checksum "pom.xml" }}
+          key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
       - run: mvn package -Dmaven.test.skip=true
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - .
+
+
+  docker-build:
+    executor: docker-publish/docker
+    steps:
+      - attach_workspace:
+          at: ~/
+      - setup_remote_docker
+      - docker-publish/check
+      - docker-publish/build
+      - docker-publish/deploy
+
+
+  docker-build-latest:
+    executor: docker-publish/docker
+    steps:
+      - attach_workspace:
+          at: ~/
+      - setup_remote_docker
+      - docker-publish/check
+      - docker-publish/build:
+          tag: latest
+      - docker-publish/deploy
+
 
 workflows:
   version: 2
@@ -99,3 +134,12 @@ workflows:
           requires:
             - static-analysis
             - spotbugs-analysis
+      - docker-build:
+          requires:
+            - packaging
+      - docker-build-latest:
+          requires:
+            - packaging
+          filters:
+            branches:
+              only: master
