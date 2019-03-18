@@ -3,7 +3,8 @@ version: 2.1
 executors:
   circleci-setup-executor:
     docker:
-      - image: circleci/openjdk:8-jdk-browsers
+      - image: circleci/openjdk:8u162-jdk
+
 
 jobs:
   unit-test:
@@ -11,17 +12,18 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: circleci-setup-{{ checksum "pom.xml" }}
+          key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
       - run: mvn dependency:go-offline
       - save_cache:
           paths:
             - ~/.m2
-          key: circleci-setup-{{ checksum "pom.xml" }}
+          key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
       - run: mvn test
       - persist_to_workspace:
           root: ~/
           paths:
             - .
+
 
   integration-test:
     executor: circleci-setup-executor
@@ -29,12 +31,13 @@ jobs:
       - attach_workspace:
           at: ~/
       - restore_cache:
-          key: circleci-setup-{{ checksum "pom.xml" }}
+          key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
       - run: mvn verify -Dskip.surefire.tests=true
       - persist_to_workspace:
           root: ~/
           paths:
             - .
+
 
   mutation-test:
     executor: circleci-setup-executor
@@ -42,12 +45,13 @@ jobs:
       - attach_workspace:
           at: ~/
       - restore_cache:
-          key: circleci-setup-{{ checksum "pom.xml" }}
+          key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
       - run: mvn org.pitest:pitest-maven:mutationCoverage
       - persist_to_workspace:
           root: ~/
           paths:
             - .
+
 
   static-analysis:
     executor: circleci-setup-executor
@@ -55,8 +59,9 @@ jobs:
       - attach_workspace:
           at: ~/
       - restore_cache:
-          key: circleci-setup-{{ checksum "pom.xml" }}
+          key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
       - run: mvn sonar:sonar -Dsonar.organization=${SONAR_ORGANIZATION} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectKey=${PROJECT_KEY} -Dsonar.branch.name=${CIRCLE_BRANCH}
+
 
   spotbugs-analysis:
     executor: circleci-setup-executor
@@ -64,7 +69,7 @@ jobs:
       - attach_workspace:
           at: ~/
       - restore_cache:
-          key: circleci-setup-{{ checksum "pom.xml" }}
+          key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
       - run: mvn spotbugs:check
 
 
@@ -74,8 +79,9 @@ jobs:
       - attach_workspace:
           at: ~/
       - restore_cache:
-          key: circleci-setup-{{ checksum "pom.xml" }}
+          key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
       - run: mvn package -Dmaven.test.skip=true
+
 
 workflows:
   version: 2
