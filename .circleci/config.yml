@@ -110,10 +110,7 @@ workflows:
       - spotbugs-analysis:
           requires:
             - mutation-test
-      - packaging:
+      - docker-build:
           requires:
             - static-analysis
             - spotbugs-analysis
-      - docker-build:
-          requires:
-            - packaging
