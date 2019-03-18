@@ -103,6 +103,9 @@ jobs:
 
   docker-build-latest:
     executor: docker-publish/docker
+    branches:
+      only:
+        - master
     steps:
       - attach_workspace:
           at: ~/
@@ -111,9 +114,6 @@ jobs:
       - docker-publish/build:
           tag: latest
       - docker-publish/deploy
-    branches:
-      only:
-        -master
 
 
 workflows:
