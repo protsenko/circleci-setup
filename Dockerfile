@@ -9,7 +9,7 @@ LABEL \
     org.label-schema.vcs-ref=$VCS_REF \
     org.label-schema.name=$PROJECT_NAME \
     org.label-schema.vcs-url=$PROJECT_REPO_URL \
-    org.label-schema.vendor="protsenko" \
+    org.label-schema.vendor="protsenko"
 
 ADD ./target/*.jar /opt/app/app.jar
 
