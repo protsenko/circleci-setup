@@ -97,7 +97,8 @@ jobs:
           at: ~/
       - setup_remote_docker
       - docker-publish/check
-      - docker-publish/build
+      - docker-publish/build:
+          extra_build_args: '--build-arg PROJECT_NAME=${CIRCLE_PROJECT_REPONAME} --build-arg PROJECT_REPO_URL=${CIRCLE_REPOSITORY_URL} --build-arg VCS_REF=${CIRCLE_SHA1}'
       - docker-publish/deploy
 
 
