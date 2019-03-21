@@ -27,7 +27,6 @@ jobs:
           paths:
             - .
 
-
   integration-test:
     executor: circleci-setup-executor
     steps:
@@ -41,7 +40,6 @@ jobs:
           paths:
             - .
 
-
   mutation-test:
     executor: circleci-setup-executor
     steps:
@@ -54,7 +52,6 @@ jobs:
           root: ~/
           paths:
             - .
-
 
   static-analysis:
     executor: circleci-setup-executor
@@ -75,7 +72,6 @@ jobs:
           key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
       - run: mvn spotbugs:check
 
-
   packaging:
     executor: circleci-setup-executor
     steps:
@@ -89,7 +85,6 @@ jobs:
           paths:
             - .
 
-
   docker-build:
     executor: docker-publish/docker
     steps:
@@ -98,9 +93,10 @@ jobs:
       - setup_remote_docker
       - docker-publish/check
       - docker-publish/build:
-          extra_build_args: '--build-arg PROJECT_NAME=${CIRCLE_PROJECT_REPONAME} --build-arg PROJECT_REPO_URL=${CIRCLE_REPOSITORY_URL} --build-arg VCS_REF=${CIRCLE_SHA1}'
+          extra_build_args: '--build-arg PROJECT_NAME=${CIRCLE_PROJECT_REPONAME}
+            --build-arg PROJECT_REPO_URL=${CIRCLE_REPOSITORY_URL}
+            --build-arg VCS_REF=${CIRCLE_SHA1}'
       - docker-publish/deploy
-
 
   docker-build-latest:
     executor: docker-publish/docker
@@ -110,6 +106,9 @@ jobs:
       - setup_remote_docker
       - docker-publish/check
       - docker-publish/build:
+          extra_build_args: '--build-arg PROJECT_NAME=${CIRCLE_PROJECT_REPONAME}
+            --build-arg PROJECT_REPO_URL=${CIRCLE_REPOSITORY_URL}
+            --build-arg VCS_REF=${CIRCLE_SHA1}'
           tag: latest
       - docker-publish/deploy
 
