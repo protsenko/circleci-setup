@@ -93,10 +93,9 @@ jobs:
       - setup_remote_docker
       - docker-publish/check
       - docker-publish/build:
-          extra_build_args: >
-            --build-arg PROJECT_NAME=${CIRCLE_PROJECT_REPONAME}
+          extra_build_args: '--build-arg PROJECT_NAME=${CIRCLE_PROJECT_REPONAME}
             --build-arg PROJECT_REPO_URL=${CIRCLE_REPOSITORY_URL}
-            --build-arg VCS_REF=${CIRCLE_SHA1}
+            --build-arg VCS_REF=${CIRCLE_SHA1}'
       - docker-publish/deploy
 
   docker-build-latest:
@@ -107,10 +106,9 @@ jobs:
       - setup_remote_docker
       - docker-publish/check
       - docker-publish/build:
-          extra_build_args: >
-            --build-arg PROJECT_NAME=${CIRCLE_PROJECT_REPONAME}
+          extra_build_args: '--build-arg PROJECT_NAME=${CIRCLE_PROJECT_REPONAME}
             --build-arg PROJECT_REPO_URL=${CIRCLE_REPOSITORY_URL}
-            --build-arg VCS_REF=${CIRCLE_SHA1}
+            --build-arg VCS_REF=${CIRCLE_SHA1}'
           tag: latest
       - docker-publish/deploy
 
