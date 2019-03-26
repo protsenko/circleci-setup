@@ -1,4 +1,4 @@
-FROM openjdk:8u181-jre
+FROM openjdk:8-jre-slim
 
 ARG VCS_REF
 ARG PROJECT_NAME
