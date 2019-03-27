@@ -11,6 +11,11 @@ LABEL \
     org.label-schema.vcs-url=$PROJECT_REPO_URL \
     org.label-schema.vendor="protsenko"
 
-ADD ./target/*.jar /opt/app/app.jar
+ADD ./target/$PROJECT_NAME-*.jar /opt/app/app.jar
+ADD ./docker/entrypoint.sh /opt/app/entrypoint.sh
+RUN chmod +x /opt/app/entrypoint.sh
 
+EXPOSE 8080
+
+ENTRYPOINT ["/opt/app/entrypoint.sh"]
 CMD ["java", "-jar", "/opt/app/app.jar"]
