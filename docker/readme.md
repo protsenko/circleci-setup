@@ -1,10 +1,12 @@
 ## Manual docker image build
 
+### Build the application
 ```
-cd ${PROJECT_ROOT_DIR}
-
 mvn clean package
+```
 
+### Build docker image
+```
 docker build \
 --rm -t circleci-setup:manual -f ./docker/Dockerfile \
 --build-arg PROJECT_NAME=circleci-setup .  
