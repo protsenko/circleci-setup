@@ -127,6 +127,7 @@ workflows:
           requires:
             - integration-test
       - static-analysis:
+          context: sonarcloud
           requires:
             - mutation-test
       - spotbugs-analysis:
