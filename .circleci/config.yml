@@ -101,6 +101,7 @@ jobs:
       - setup_remote_docker
       - docker-publish/check
       - docker-publish/build:
+          dockerfile: ./docker/Dockerfile
           extra_build_args: '--build-arg PROJECT_NAME=${CIRCLE_PROJECT_REPONAME}
             --build-arg PROJECT_REPO_URL=${CIRCLE_REPOSITORY_URL}
             --build-arg VCS_REF=${CIRCLE_SHA1}'
@@ -114,6 +115,7 @@ jobs:
       - setup_remote_docker
       - docker-publish/check
       - docker-publish/build:
+          dockerfile: ./docker/Dockerfile
           extra_build_args: '--build-arg PROJECT_NAME=${CIRCLE_PROJECT_REPONAME}
             --build-arg PROJECT_REPO_URL=${CIRCLE_REPOSITORY_URL}
             --build-arg VCS_REF=${CIRCLE_SHA1}'
@@ -133,6 +135,7 @@ workflows:
           requires:
             - integration-test
       - static-analysis:
+          context: sonarcloud
           requires:
             - mutation-test
       - spotbugs-analysis:
@@ -147,9 +150,11 @@ workflows:
             - spotbugs-analysis
             - checkstyle-analysis
       - docker-build:
+          context: dockerhub
           requires:
             - packaging
       - docker-build-latest:
+          context: dockerhub
           requires:
             - packaging
           filters:
