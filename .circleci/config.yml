@@ -137,9 +137,11 @@ workflows:
             - static-analysis
             - spotbugs-analysis
       - docker-build:
+          context: dockerhub
           requires:
             - packaging
       - docker-build-latest:
+          context: dockerhub
           requires:
             - packaging
           filters:
