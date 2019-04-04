@@ -162,9 +162,8 @@
                 <configuration>
                     <configLocation>checkstyle/checkstyle-google.xml</configLocation>
                     <violationSeverity>warning</violationSeverity>
-                    <!--Temporary options -->
-                    <failOnViolation>false</failOnViolation>
-                    <failsOnError>false</failsOnError>
+                    <failOnViolation>true</failOnViolation>
+                    <failsOnError>true</failsOnError>
                 </configuration>
                 <executions>
                     <execution>
