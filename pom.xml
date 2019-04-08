@@ -160,7 +160,7 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>${maven-checkstyle-plugin.version}</version>
                 <configuration>
-                    <configLocation>checkstyle/checkstyle-google.xml</configLocation>
+                    <configLocation>.checkstyle/google-mod.xml</configLocation>
                     <violationSeverity>warning</violationSeverity>
                     <failOnViolation>true</failOnViolation>
                     <failsOnError>true</failsOnError>
