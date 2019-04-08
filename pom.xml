@@ -160,19 +160,11 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>${maven-checkstyle-plugin.version}</version>
                 <configuration>
-                    <configLocation>checkstyle/checkstyle-google.xml</configLocation>
+                    <configLocation>.checkstyle/google-mod.xml</configLocation>
                     <violationSeverity>warning</violationSeverity>
-                    <!--Temporary options -->
-                    <failOnViolation>false</failOnViolation>
-                    <failsOnError>false</failsOnError>
+                    <failOnViolation>true</failOnViolation>
+                    <failsOnError>true</failsOnError>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <dependencies>
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
