@@ -101,7 +101,7 @@ jobs:
       - setup_remote_docker
       - docker-publish/check
       - docker-publish/build:
-          dockerfile: ./docker/Dockerfile
+          dockerfile: .docker/Dockerfile
           extra_build_args: "--build-arg PROJECT_NAME=${CIRCLE_PROJECT_REPONAME}
             --build-arg PROJECT_REPO_URL=${CIRCLE_REPOSITORY_URL}
             --build-arg VCS_REF=${CIRCLE_SHA1}
@@ -116,7 +116,7 @@ jobs:
       - setup_remote_docker
       - docker-publish/check
       - docker-publish/build:
-          dockerfile: ./docker/Dockerfile
+          dockerfile: .docker/Dockerfile
           extra_build_args: "--build-arg PROJECT_NAME=${CIRCLE_PROJECT_REPONAME}
             --build-arg PROJECT_REPO_URL=${CIRCLE_REPOSITORY_URL}
             --build-arg VCS_REF=${CIRCLE_SHA1}

@@ -15,7 +15,7 @@ LABEL \
     org.label-schema.vendor="protsenko"
 
 ADD ./target/$PROJECT_NAME-*.jar /opt/app/app.jar
-ADD ./docker/entrypoint.sh /opt/app/entrypoint.sh
+ADD .docker/entrypoint.sh /opt/app/entrypoint.sh
 RUN chmod +x /opt/app/entrypoint.sh
 
 EXPOSE 8080
