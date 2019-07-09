@@ -9,3 +9,4 @@ target/
 
 # Maven release
 release.properties
+*.releaseBackup
