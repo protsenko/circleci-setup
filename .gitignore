@@ -6,3 +6,7 @@ target/
 .settings/
 .classpath
 .project
+
+# Maven release
+release.properties
+*.releaseBackup
