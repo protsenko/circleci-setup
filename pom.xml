@@ -189,7 +189,10 @@
                 <configuration>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <releaseProfiles>releases</releaseProfiles>
+                    <scmCommentPrefix>[ci skip]</scmCommentPrefix>
+                    <dryRun>false</dryRun>
+                    <resume>false</resume>
+                    <arguments>-Dmaven.test.skip=true -DskipTests</arguments>
                 </configuration>
             </plugin>
         </plugins>
