@@ -124,10 +124,19 @@ jobs:
           tag: latest
       - docker-publish/deploy
 
+  release:
+    executor: circleci-setup-executor
+    steps:
+      - attach_workspace:
+          at: ~/
+      - restore_cache:
+          key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
+      - run: mvn release:clean release:prepare
+
 
 workflows:
   version: 2
-  standart-workflow:
+  default-workflow:
     jobs:
       - unit-test
       - integration-test:
@@ -159,6 +168,13 @@ workflows:
           context: dockerhub
           requires:
             - packaging
+          filters:
+            branches:
+              only: master
+      - release:
+          requires:
+            - docker-build-latest
+          type: approval
           filters:
             branches:
               only: master
