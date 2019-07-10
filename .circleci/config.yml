@@ -131,7 +131,7 @@ jobs:
           at: ~/
       - restore_cache:
           key: ${CIRCLE_PROJECT_REPONAME}-{{ checksum "pom.xml" }}
-      - run: mvn release:clean release:prepare
+      - run: mvn --batch-mode release:clean release:prepare
 
 
 workflows:
