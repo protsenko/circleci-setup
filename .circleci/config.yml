@@ -93,21 +93,6 @@ jobs:
           paths:
             - .
 
-  docker-build:
-    executor: docker-publish/docker
-    steps:
-      - attach_workspace:
-          at: ~/
-      - setup_remote_docker
-      - docker-publish/check
-      - docker-publish/build:
-          dockerfile: .docker/Dockerfile
-          extra_build_args: "--build-arg PROJECT_NAME=${CIRCLE_PROJECT_REPONAME}
-            --build-arg PROJECT_REPO_URL=${CIRCLE_REPOSITORY_URL}
-            --build-arg VCS_REF=${CIRCLE_SHA1}
-            --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-      - docker-publish/deploy
-
   docker-build-latest:
     executor: docker-publish/docker
     steps:
@@ -122,6 +107,21 @@ jobs:
             --build-arg VCS_REF=${CIRCLE_SHA1}
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
           tag: latest
+      - docker-publish/deploy
+
+  docker-build:
+    executor: docker-publish/docker
+    steps:
+      - attach_workspace:
+          at: ~/
+      - setup_remote_docker
+      - docker-publish/check
+      - docker-publish/build:
+          dockerfile: .docker/Dockerfile
+          extra_build_args: "--build-arg PROJECT_NAME=${CIRCLE_PROJECT_REPONAME}
+            --build-arg PROJECT_REPO_URL=${CIRCLE_REPOSITORY_URL}
+            --build-arg VCS_REF=${CIRCLE_SHA1}
+            --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
       - docker-publish/deploy
 
   release:
