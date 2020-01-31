@@ -32,7 +32,7 @@
         <maven-failsafe-plugin.version>3.0.0-M3</maven-failsafe-plugin.version>
         <maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-        <puppy-crawl-checkstyle.version>8.18</puppy-crawl-checkstyle.version>
+        <puppy-crawl-checkstyle.version>8.29</puppy-crawl-checkstyle.version>
         <pitest-maven.version>1.4.5</pitest-maven.version>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>3.4.0.905</sonar-maven-plugin.version>
