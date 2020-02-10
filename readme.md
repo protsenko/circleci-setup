@@ -3,6 +3,7 @@
 ### Build pipeline
 
 [![CircleCI](https://circleci.com/gh/protsenko/circleci-setup/tree/master.svg?style=svg)](https://circleci.com/gh/protsenko/circleci-setup/tree/master)
+[![Java CI](https://github.com/protsenko/circleci-setup/workflows/Java%20CI/badge.svg)](https://github.com/protsenko/circleci-setup/actions)
 
 ### Docker image
 
